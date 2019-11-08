@@ -25,3 +25,8 @@ body {
     background:url('../images/bathroom(cover).jpg');
     background-size: cover;
 }
+#main-footer {
+    background: #000;
+    color: #fff;
+  }
+  

@@ -32,9 +32,6 @@
                         <a href="about.html" class="nav-link">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a href="services.html" class="nav-link">Services</a>
-                    </li>
-                    <li class="nav-item">
                         <a href="blog.html" class="nav-link">About Us</a>
                     </li>
                     <li class="nav-item">
@@ -127,41 +124,47 @@
     <!--Carousel of Cards-->
     <section id="card-carousel" class="bg-light text-dark py-5">
         <h2 class="d-flex justify-content-center">Some of our Services</h1><br>
-        <div class="container">
-            <div class="card-columns">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="/images/construction-card.jpg" alt="">
-                    <div class="card-body">
-                        <h4 class="card-title d-flex justify-content-center">Construction</h4>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content
-                            is a little bit longer.</p>
-                        <div class="button-container d-flex justify-content-center"><a href="#" class="btn btn-success btn-lg">Book Now</a></div>
+            <div class="container">
+                <div class="card-columns">
+                    <div class="card">
+                        <img class="card-img-top img-fluid" src="/images/construction-card.jpg" alt="">
+                        <div class="card-body">
+                            <h4 class="card-title d-flex justify-content-center">Construction</h4>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
+                                to
+                                additional content. This content
+                                is a little bit longer.</p>
+                            <div class="button-container d-flex justify-content-center"><a href="#"
+                                    class="btn btn-success btn-lg">Book Now</a></div>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="/images/cleanup-card.jpg" alt="">
-                    <div class="card-body">
-                        <h4 class="card-title d-flex justify-content-center">Cleaning Up</h4>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content
-                            is a little bit longer.</p>
-                            <div class="button-container d-flex justify-content-center" ><a href="#" class="btn btn-success btn-lg">Book Now</a></div>
+                    <div class="card">
+                        <img class="card-img-top img-fluid" src="/images/cleanup-card.jpg" alt="">
+                        <div class="card-body">
+                            <h4 class="card-title d-flex justify-content-center">Cleaning Up</h4>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
+                                to
+                                additional content. This content
+                                is a little bit longer.</p>
+                            <div class="button-container d-flex justify-content-center"><a href="#"
+                                    class="btn btn-success btn-lg">Book Now</a></div>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="/images/repair-card.jpg" alt="">
-                    <div class="card-body">
-                        <h4 class="card-title d-flex justify-content-center">Repair and Maintainence</h4>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content
-                            is a little bit longer.</p>
-                            <div class="button-container d-flex justify-content-center"><a href="#" class="btn btn-success btn-lg">Book Now</a></div>
+                    <div class="card">
+                        <img class="card-img-top img-fluid" src="/images/repair-card.jpg" alt="">
+                        <div class="card-body">
+                            <h4 class="card-title d-flex justify-content-center">Repair and Maintainence</h4>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in
+                                to
+                                additional content. This content
+                                is a little bit longer.</p>
+                            <div class="button-container d-flex justify-content-center"><a href="#"
+                                    class="btn btn-success btn-lg">Book Now</a></div>
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
     </section>
 
     <!--Random Section-->
@@ -182,7 +185,47 @@
             </div>
         </div>
     </section>
+    <!--Our Satisfied Customer-->
+    <section id="staff" class="py-5 text-center bg-light text-dark">
+        <div class="container">
+            <h1>Our Satisfied Customers</h1>
+            <hr>
+            <div class="row">
+                <div class="col-md-3">
+                    <img src="images/customer1.jpg" alt="" class="img-fluid rounded-circle mb-2">
+                    <h4>John Doe</h4>
+                    <small>Konchady</small>
+                </div>
+                <div class="col-md-3">
+                    <img src="images/customer2.jpg" alt="" class="img-fluid rounded-circle mb-2">
+                    <h4>Sara Williams</h4>
+                    <small>Vamanjoor</small>
+                </div>
+                <div class="col-md-3">
+                    <img src="images/customer3.jpg" alt="" class="img-fluid rounded-circle mb-2">
+                    <h4>Jane Mary</h4>
+                    <small>Kaikamba</small>
+                </div>
+                <div class="col-md-3">
+                    <img src="images/customer4.jpg" alt="" class="img-fluid rounded-circle mb-2">
+                    <h4>Alexa Walker</h4>
+                    <small>Kottara</small>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- FOOTER -->
+    <footer id="main-footer" class="text-center p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>Copyright &copy;
+                        <span id="year"></span> Glozzom</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -199,6 +242,10 @@
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script>
+        // Get the current year for the copyright
+        $('#year').text(new Date().getFullYear());
     </script>
 </body>
 
