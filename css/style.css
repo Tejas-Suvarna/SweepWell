@@ -39,10 +39,7 @@ body {
 
 
 
-/* To make the drop down menu display over the slider */
-#myCarousel {
-    z-index: -1;
-}
+
 
 /*---------------------------*/
 /*-------ABOUT US------------*/
