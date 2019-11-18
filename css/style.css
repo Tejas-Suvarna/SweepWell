@@ -42,7 +42,7 @@ body {
 
 
 /*---------------------------*/
-/*-------ABOUT US------------*/
+/*-------ABOUT------------*/
 /*---------------------------*/
 #about-page-header {
     height: 200px;
@@ -53,8 +53,22 @@ body {
     border-bottom: 1px #eee solid;
     padding-top: 50px;
     background-size: cover;
-  }
+}
 
 .about-img {
     margin-top: -50px;
+}
+
+/*---------------------------*/
+/*-------CONTACT------------*/
+/*---------------------------*/
+#contact-page-header {
+    height: 200px;
+    background: url('../images/contact-cover.jpg');
+    background-position: 0 -360px;
+    background-attachment: fixed;
+    color: #fff;
+    border-bottom: 1px #eee solid;
+    padding-top: 50px;
+    background-size: cover;
 }
