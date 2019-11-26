@@ -1,0 +1,25 @@
+{
+  "name": "sweepwell",
+  "version": "1.0.0",
+  "description": "This is a college web mini-project.",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tejas-Suvarna/SweepWell.git"
+  },
+  "keywords": [
+    "NodeJS",
+    "Project",
+    "Web"
+  ],
+  "author": "Tejas. N. Suvarna",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Tejas-Suvarna/SweepWell/issues"
+  },
+  "homepage": "https://github.com/Tejas-Suvarna/SweepWell#readme"
+}
