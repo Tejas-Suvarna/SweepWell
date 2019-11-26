@@ -41,8 +41,28 @@ app.get('/', (req, res) => {
 });
 
 // About Page
-app.get('/', (req, res) => {
-    res.render('home');
+app.get('/about', (req, res) => {
+    res.render('about');
+});
+
+// Contact Page
+app.get('/contact', (req, res) => {
+    res.render('contact');
+});
+
+// Construction Page
+app.get('/construction', (req, res) => {
+    res.render('construction');
+});
+
+// Cleaning Page
+app.get('/cleaning', (req, res) => {
+    res.render('cleaning');
+});
+
+// Repair Page
+app.get('/repair', (req, res) => {
+    res.render('repair');
 });
 
 ////////////////////////////////
