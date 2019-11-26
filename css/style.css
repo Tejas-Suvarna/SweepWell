@@ -89,4 +89,35 @@ body {
     /* padding-top: 10%; */
     background-size: cover;
     background-repeat: no-repeat;
+    height: 400px;
+}
+
+/*---------------------------*/
+/*-------CLEANING------------*/
+/*---------------------------*/
+#cleaning-page-header {
+    background: url('../images/cleanup-cover.jpg');
+    background-position: 0px -300px;
+    background-attachment: fixed;
+    color: #fff;
+    border-bottom: 1px #eee solid;
+    /* padding-top: 10%; */
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 400px;
+}
+
+/*---------------------------*/
+/*-------REPAIR------------*/
+/*---------------------------*/
+#repair-page-header {
+    background: url('../images/repair-cover.jpg');
+    background-position: 0px -300px;
+    background-attachment: fixed;
+    color: #fff;
+    border-bottom: 1px #eee solid;
+    /* padding-top: 10%; */
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 400px;
 }
