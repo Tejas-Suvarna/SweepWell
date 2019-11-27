@@ -121,3 +121,31 @@ body {
     background-repeat: no-repeat;
     height: 400px;
 }
+
+/*---------------------------*/
+/*-------LOGIN------------*/
+/*---------------------------*/
+
+@media only screen and (min-width : 0px) and (max-width : 1700px) {
+    .wrapper {
+        padding: 13% 0% 15% 0;
+    }
+}
+
+@media only screen and (min-width : 1701px) and (max-width : 1920px) {
+    .wrapper {
+        padding: 13% 0% 10% 0;
+    }
+}
+
+.form-signin {
+    max-width: 500px;
+    padding: 15px 35px 45px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#login{
+    background: url('../images/login-bg.png');
+}

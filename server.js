@@ -65,6 +65,16 @@ app.get('/repair', (req, res) => {
     res.render('repair');
 });
 
+// Login Page
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+// Register Page
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
 ////////////////////////////////
 ////////////////////////////////
 
