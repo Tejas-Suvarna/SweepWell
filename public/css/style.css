@@ -148,5 +148,11 @@ body {
 }
 
 #login{
-    background: url('../images/login-bg.png');
+    background: url('../images/login-bg.jpg');
+    background-size: cover;
+}
+
+#register{
+    background: url('../images/register-bg.jpg');
+    background-size: cover;
 }
