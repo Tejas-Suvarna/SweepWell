@@ -5,6 +5,15 @@ const hbs = require('express-handlebars');
 //const bodyParser = require('body-parser');
 // const fetch = require('node-fetch');
 const app = express();
+const sqlite3 = require('sqlite3').verbose();
+
+////////////////////////////////
+////////////////////////////////
+
+
+////////#### IMPORTS ####////////
+
+const db = new sqlite3.Database('database');
 
 ////////////////////////////////
 ////////////////////////////////
