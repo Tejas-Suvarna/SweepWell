@@ -42,19 +42,35 @@ let registerUser = (username, password) => {
         } else if (result.count == 0) {
             db.serialize(function () {
                 try {
-                    var stmt = db.prepare("INSERT INTO USER(USERNAME,PASSWORD) values(?,?)");
+                    let stmt = db.prepare("INSERT INTO USER(USERNAME,PASSWORD) values(?,?)");
                     stmt.run(username, password);
                     stmt.finalize();
                     user = username;
                     console.log(user + " registered.");
                 } catch (err) {
-                    console.log("Oh no")
+                    console.log("Oh no");
                 }
             });
         } else {
             alreadyUser = true;
         }
     });
+    //db.close();
+}
+
+let addUserBooking = (username, date, time, noStaff, desc, zipcode) => {
+    db.serialize(function () {
+        try {
+            let stmt = db.prepare("INSERT INTO ORDERS(DATE,TIME,NO_OF_STAFF,DESCRIPTION,ZIPCODE,USERID) values(?,?,?,?,?,(SELECT USERID FROM USER WHERE USERNAME=?));");
+            stmt.run(date, time, noStaff, desc, zipcode, username);
+            stmt.finalize();
+            user = username;
+            console.log("Order of " + user + " booked.");
+        } catch (err) {
+            console.log("Oh no")
+        }
+    });
+
     //db.close();
 }
 
@@ -112,14 +128,14 @@ app.use("/images", express.static(__dirname + '/public/images'));
 app.get('/', (req, res) => {
     if (user === '') {
         res.render('home', {
-            navButton:{
+            navButton: {
                 text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
         });
     } else res.render('home', {
-        navButton:{
+        navButton: {
             text: 'Profile',
             link: '/profile'
         },
@@ -131,14 +147,14 @@ app.get('/', (req, res) => {
 app.get('/about', (req, res) => {
     if (user === '') {
         res.render('about', {
-            navButton:{
+            navButton: {
                 text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
         });
     } else res.render('about', {
-        navButton:{
+        navButton: {
             text: 'Profile',
             link: '/profile'
         },
@@ -150,14 +166,14 @@ app.get('/about', (req, res) => {
 app.get('/contact', (req, res) => {
     if (user === '') {
         res.render('contact', {
-            navButton:{
+            navButton: {
                 text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
         });
     } else res.render('contact', {
-        navButton:{
+        navButton: {
             text: 'Profile',
             link: '/profile'
         },
@@ -167,35 +183,57 @@ app.get('/contact', (req, res) => {
 
 // Construction Page
 app.get('/construction', (req, res) => {
-    if (user === '') {
-        res.render('construction', {
-            navButton:{
-                text: 'Login / Register',
-                link: '/login'
+    if (Object.entries(req.query).length === 0 && req.query.constructor === Object) {
+        if (user === '') {
+            res.render('construction', {
+                navButton: {
+                    text: 'Login / Register',
+                    link: '/login'
+                },
+                empty: 'Nothing'
+            });
+        } else res.render('construction', {
+            navButton: {
+                text: 'Profile',
+                link: '/profile'
             },
             empty: 'Nothing'
         });
-    } else res.render('construction', {
-        navButton:{
-            text: 'Profile',
-            link: '/profile'
-        },
-        empty: 'Nothing'
-    });
+    } else {
+        if (user === '') {
+            res.redirect('login');
+        } else {
+            //console.log(req.query);
+            if (req.query.date === undefined || req.query.time === undefined || req.query.nostaff === undefined || req.query.desc === undefined || req.query.zip === undefined ||
+                req.query.date === '' || req.query.time === '' || req.query.nostaff === '' || req.query.desc === '' || req.query.zip === '') {
+                console.log('Incom');
+                res.redirect('construction');
+                return;
+            }
+            addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip);
+            res.render('successBooking', {
+                navButton: {
+                    text: 'Profile',
+                    link: '/profile'
+                },
+                empty: 'Nothing'
+            });
+        }
+    }
 });
 
 // Cleaning Page
 app.get('/cleaning', (req, res) => {
     if (user === '') {
         res.render('cleaning', {
-            navButton:{
+            navButton: {
                 text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
         });
     } else res.render('cleaning', {
-        navButton:{
+        navButton: {
             text: 'Profile',
             link: '/profile'
         },
@@ -207,14 +245,14 @@ app.get('/cleaning', (req, res) => {
 app.get('/repair', (req, res) => {
     if (user === '') {
         res.render('repair', {
-            navButton:{
+            navButton: {
                 text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
         });
     } else res.render('repair', {
-        navButton:{
+        navButton: {
             text: 'Profile',
             link: '/profile'
         },
@@ -266,7 +304,7 @@ app.post('/register/auth', (req, res) => {
         console.log(user + " logged in.");
         if (!alreadyUser) {
             res.redirect('/');
-        } else{
+        } else {
             res.redirect('/registerInvalid');
         }
     }

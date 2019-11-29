@@ -68,7 +68,7 @@
         <div class="container">
             <div class="row">
                 <!-- <div class="col-1 bg-white" style="border:1px solid #ffff">Equal Width</div> -->
-                <div class="col bg-white" style="border:1px solid #ffff">
+                <form class="col bg-white" style="border:1px solid #ffff">
                     <div style="margin-top: -10px">
                         <div style="margin-top: -70px;">
                             <div class="card pl-5 pr-5">
@@ -78,14 +78,14 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input class="date form-control" type="date" name="bday"
+                                                <input class="date form-control" type="date" name="date"
                                                     placeholder="Choose Date">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <div class="form-group">
-                                                    <select class="form-control" id="gender">
+                                                    <select class="form-control" name="time">
                                                         <option disabled selected="selected">Choose a Time</option>
                                                         <option>9:00</option>
                                                         <option>10:00</option>
@@ -104,7 +104,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <select class="form-control" id="gender">
+                                                <select class="form-control" id="staffNo" name="nostaff">
                                                     <option disabled selected="selected">Number of Staff</option>
                                                     <option>1</option>
                                                     <option>2</option>
@@ -116,7 +116,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Zip Code">
+                                                <input type="text" class="form-control" placeholder="Zip Code" name="zip">
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <textarea class="form-control"
-                                                    placeholder="Description of the Work"></textarea>
+                                                    placeholder="Description of the Work" name="desc"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
