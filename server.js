@@ -23,6 +23,40 @@ app.use(bodyParser.urlencoded({ // support encoded bodies
     extended: true
 }));
 
+function formatDate(d) {
+    var date = new Date(d);
+
+    if (isNaN(date.getTime())) {
+        return d;
+    } else {
+
+        var month = new Array();
+        month[0] = "Jan";
+        month[1] = "Feb";
+        month[2] = "Mar";
+        month[3] = "Apr";
+        month[4] = "May";
+        month[5] = "Jun";
+        month[6] = "Jul";
+        month[7] = "Aug";
+        month[8] = "Sept";
+        month[9] = "Oct";
+        month[10] = "Nov";
+        month[11] = "Dec";
+
+        day = date.getDate();
+
+        if (day < 10) {
+            day = "0" + day;
+        }
+
+        return day + " " + month[date.getMonth()] + " " + date.getFullYear();
+    }
+
+}
+
+
+
 
 let getUser = (username, password) => {
     db.get('SELECT COUNT(*) count from USER WHERE USERNAME = ? AND PASSWORD = ?;', [username, password], (err, result) => { /////QUERY TO CHECK IF USER ALREADY EXISTS
@@ -61,8 +95,13 @@ let registerUser = (username, password) => {
 let addUserBooking = (username, date, time, noStaff, desc, zipcode, job) => {
     db.serialize(function () {
         try {
-            let stmt = db.prepare("INSERT INTO ORDERS(DATE,TIME,NO_OF_STAFF,DESCRIPTION,ZIPCODE,USERID,JOB) values(?,?,?,?,?,(SELECT USERID FROM USER WHERE USERNAME=?),?);");
-            stmt.run(date, time, noStaff, desc, zipcode, username, job);
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            var dateNow = yyyy + '-' + mm + '-' + dd;
+            let stmt = db.prepare("INSERT INTO ORDERS(DATE,TIME,NO_OF_STAFF,DESCRIPTION,ZIPCODE,USERID,JOB,ADDEDDATE) values(?,?,?,?,?,(SELECT USERID FROM USER WHERE USERNAME=?),?,?);");
+            stmt.run(formatDate(date), time, noStaff, desc, zipcode, username, job, formatDate(dateNow));
             stmt.finalize();
             user = username;
             console.log("Order of " + user + " booked.");
@@ -76,7 +115,7 @@ let addUserBooking = (username, date, time, noStaff, desc, zipcode, job) => {
 
 let getUserOrders = (username) => {
     let arr = [];
-    const sql = 'SELECT ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb FROM ORDERS WHERE USERID = (SELECT USERID FROM USER WHERE USERNAME = ?);';
+    const sql = 'SELECT ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS WHERE USERID = (SELECT USERID FROM USER WHERE USERNAME = ?);';
     db.each(sql, [username], (err, row) => {
         if (err) {
             throw err;
@@ -87,7 +126,10 @@ let getUserOrders = (username) => {
             NO_OF_STAFF: row.nos,
             DESCRIPTION: row.desc,
             ZIPCODE: row.zip,
-            JOB: row.jb
+            JOB: row.jb,
+            STATUS: row.stats,
+            ADDEDDATE: row.ad,
+            TIME: row.tm
         });
         //console.log(`${row.ordid} ${row.date} - ${row.nos}`);
     });
@@ -365,7 +407,7 @@ app.get('/profile', (req, res) => {
                 text: 'Profile',
                 link: '/profile'
             },
-            entries1: entries
+            entries
         });
     }
     setTimeout(redirect, 1000);

@@ -16,7 +16,6 @@
 </head>
 
 <body>
-    {{entries}}
     <!--Navigation Bar-->
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container">
@@ -48,33 +47,25 @@
                         <a href="/contact" class="nav-link">Contact</a>
                     </li>
                 </ul>
-                <button class="btn btn-success my-2 my-sm-0"
-                    onclick="window.location.href = '{{navButton.link}}';" disabled>{{navButton.text}}</button>
+                <button class="btn btn-success my-2 my-sm-0" onclick="window.location.href = '{{navButton.link}}';"
+                    disabled>{{navButton.text}}</button>
             </div>
         </div>
     </nav>
 
-    <!-- MAP -->
-    <section id="map" class="py-5 text-center bg-primary text-white">
-        <div class="container">
-            <h1>Find Us</h1>
-            <hr>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124440.31543596428!2d74.78202359237207!3d12.923150187022465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a4c37bf488f%3A0x827bbc7a74fcfe64!2sMangalore%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1574083695254!5m2!1sen!2sin"
-                width="800" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-        </div>
-    </section>
-
-    <!-- MAP -->
-    <section id="map" class="py-5 text-center bg-primary text-white">
-        <div class="container">
-            <h1>Find Us</h1>
-            <hr>
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124440.31543596428!2d74.78202359237207!3d12.923150187022465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a4c37bf488f%3A0x827bbc7a74fcfe64!2sMangalore%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1574083695254!5m2!1sen!2sin"
-                width="800" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-        </div>
-    </section>
+    {{#each entries}}
+    <div class="container">
+        <div>{{this.ORDERID}}</div>
+        <div>{{this.NO_OF_STAFF}}</div>
+        <div>{{this.DATE}}</div>
+        <div>{{this.DESCRIPTION}}</div>
+        <div>{{this.ZIPCODE}}</div>
+        <div>{{this.JOB}}</div>
+        <div>{{this.STATUS}}</div>
+        <div>{{this.ADDEDDATE}}</div>
+        <div>{{this.TIME}}</div>
+    </div>
+    {{/each}}
 
     <!-- FOOTER -->
     <footer id="main-footer" class="text-center p-4">
