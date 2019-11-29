@@ -82,7 +82,10 @@ app.use("/images", express.static(__dirname + '/public/images'));
 
 // Home Page
 app.get('/', (req, res) => {
-    res.render('home');
+    if(user !== ''){
+        res.render('userHome',{user});
+    }
+    else res.render('home',{user});
 });
 
 // About Page
@@ -125,7 +128,7 @@ app.get('/register', (req, res) => {
 // Authenticating the User
 app.post('/login/auth', (req, res) => {
     const redirect = () => {
-        console.log(user);
+        console.log(user + " logged in.");
         if (user !== '') {
             res.redirect('/');
         } else {
