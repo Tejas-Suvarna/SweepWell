@@ -69,15 +69,15 @@ let getUser = (username, password) => {
     //db.close();
 }
 
-let registerUser = (username, password) => {
+let registerUser = (username, password, phone) => {
     db.get('SELECT COUNT(*) count from USER WHERE USERNAME = ?;', [username], (err, result) => { /////QUERY TO CHECK IF USER ALREADY EXISTS
         if (err) {
             console.log(err);
         } else if (result.count == 0) {
             db.serialize(function () {
                 try {
-                    let stmt = db.prepare("INSERT INTO USER(USERNAME,PASSWORD) values(?,?)");
-                    stmt.run(username, password);
+                    let stmt = db.prepare("INSERT INTO USER(USERNAME,PASSWORD, PHONE) values(?,?,?)");
+                    stmt.run(username, password, phone);
                     stmt.finalize();
                     user = username;
                     console.log(user + " registered.");
@@ -115,7 +115,7 @@ let addUserBooking = (username, date, time, noStaff, desc, zipcode, job) => {
 
 let getUserOrders = (username) => {
     let arr = [];
-    const sql = 'SELECT ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS WHERE USERID = (SELECT USERID FROM USER WHERE USERNAME = ?);';
+    const sql = 'SELECT ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS WHERE USERID = (SELECT USERID FROM USER WHERE USERNAME = ?) ORDER BY ORDERID DESC;';
     db.each(sql, [username], (err, row) => {
         if (err) {
             throw err;
@@ -130,6 +130,31 @@ let getUserOrders = (username) => {
             STATUS: row.stats,
             ADDEDDATE: row.ad,
             TIME: row.tm
+        });
+        //console.log(`${row.ordid} ${row.date} - ${row.nos}`);
+    });
+    return arr;
+    //db.close();
+}
+
+let getAllOrders = () => {
+    let arr = [];
+    const sql = 'SELECT USERNAME uname, ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS, USER WHERE USER.USERID = ORDERS.USERID;';
+    db.each(sql, (err, row) => {
+        if (err) {
+            throw err;
+        }
+        arr.push({
+            ORDERID: row.ordid,
+            DATE: row.date,
+            NO_OF_STAFF: row.nos,
+            DESCRIPTION: row.desc,
+            ZIPCODE: row.zip,
+            JOB: row.jb,
+            STATUS: row.stats,
+            ADDEDDATE: row.ad,
+            TIME: row.tm,
+            USERNAME: row.uname
         });
         //console.log(`${row.ordid} ${row.date} - ${row.nos}`);
     });
@@ -398,19 +423,61 @@ app.get('/registerInvalid', (req, res) => {
 
 //Displaying orders in profile
 app.get('/profile', (req, res) => {
-    let entries = getUserOrders(user);
-    const redirect = () => {
-        console.log("Fetch all data");
-        console.log(entries);
-        res.render('profile', {
-            navButton: {
-                text: 'Profile',
-                link: '/profile'
-            },
-            entries
-        });
+    if (user == 'admin') {
+        let entries = getAllOrders();
+        const redirect = () => {
+            console.log("Fetch all orders.");
+            console.log(entries);
+            if(entries.length == 0){
+                noResultsDiv = {
+                    bear: 'block',
+                    orders: 'none'
+                }
+            } else {
+                noResultsDiv = {
+                    bear: 'none',
+                    orders: 'block'
+                }
+            }
+            res.render('adminProfile', {
+                navButton: {
+                    text: 'Profile',
+                    link: '/adminProfile'
+                },
+                entries,
+                user,
+                noResultsDiv
+            });
+        }
+        setTimeout(redirect, 1000);
+    } else {
+        let entries = getUserOrders(user);
+        const redirect = () => {
+            console.log("Fetch user data.");
+            console.log(entries);
+            if (entries.length == 0) {
+                noResultsDiv = {
+                    bear: 'block',
+                    orders: 'none'
+                }
+            } else {
+                noResultsDiv = {
+                    bear: 'none',
+                    orders: 'block'
+                }
+            }
+            res.render('profile', {
+                navButton: {
+                    text: 'Profile',
+                    link: '/profile'
+                },
+                entries,
+                user,
+                noResultsDiv
+            });
+        }
+        setTimeout(redirect, 1000);
     }
-    setTimeout(redirect, 1000);
 });
 
 
@@ -420,7 +487,9 @@ app.get('/profile', (req, res) => {
 app.post('/login/auth', (req, res) => {
     const redirect = () => {
         console.log(user + " logged in.");
-        if (user !== '') {
+        if (user === 'admin') {
+            res.redirect('/profile');
+        } else if(user !== '') {
             res.redirect('/');
         } else {
             res.redirect('/loginInvalid');
@@ -444,8 +513,15 @@ app.post('/register/auth', (req, res) => {
     }
     const username = req.body['username'];
     const password = req.body['password'];
-    registerUser(username, password);
+    const phone = req.body['phone'];
+    registerUser(username, password, phone);
     setTimeout(redirect, 1000);
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+    user = '';
+    res.redirect('/');
 });
 
 ////////////////////////////////

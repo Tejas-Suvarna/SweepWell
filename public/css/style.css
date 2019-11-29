@@ -147,12 +147,26 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-#login{
+#login {
     background: url('../images/login-bg.jpg');
     background-size: cover;
 }
 
-#register{
+#register {
     background: url('../images/register-bg.jpg');
+    background-size: cover;
+}
+
+/*---------------------------*/
+/*-------JUMBOTRON DETAILS------------*/
+/*---------------------------*/
+
+#jumbotron1 {
+    background-image: url("../images/profile-user-cover.png");
+    background-size: cover;
+}
+
+#jumbotron2 {
+    background-image: url("../images/profile-admin-cover.jpg");
     background-size: cover;
 }
