@@ -58,11 +58,11 @@ let registerUser = (username, password) => {
     //db.close();
 }
 
-let addUserBooking = (username, date, time, noStaff, desc, zipcode) => {
+let addUserBooking = (username, date, time, noStaff, desc, zipcode, job) => {
     db.serialize(function () {
         try {
-            let stmt = db.prepare("INSERT INTO ORDERS(DATE,TIME,NO_OF_STAFF,DESCRIPTION,ZIPCODE,USERID) values(?,?,?,?,?,(SELECT USERID FROM USER WHERE USERNAME=?));");
-            stmt.run(date, time, noStaff, desc, zipcode, username);
+            let stmt = db.prepare("INSERT INTO ORDERS(DATE,TIME,NO_OF_STAFF,DESCRIPTION,ZIPCODE,USERID,JOB) values(?,?,?,?,?,(SELECT USERID FROM USER WHERE USERNAME=?),?);");
+            stmt.run(date, time, noStaff, desc, zipcode, username, job);
             stmt.finalize();
             user = username;
             console.log("Order of " + user + " booked.");
@@ -210,7 +210,7 @@ app.get('/construction', (req, res) => {
                 res.redirect('construction');
                 return;
             }
-            addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip);
+            addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip, "Construction");
             res.render('successBooking', {
                 navButton: {
                     text: 'Profile',
@@ -224,40 +224,84 @@ app.get('/construction', (req, res) => {
 
 // Cleaning Page
 app.get('/cleaning', (req, res) => {
-    if (user === '') {
-        res.render('cleaning', {
+    if (Object.entries(req.query).length === 0 && req.query.constructor === Object) {
+        if (user === '') {
+            res.render('cleaning', {
+                navButton: {
+                    text: 'Login / Register',
+                    link: '/login'
+                },
+                empty: 'Nothing'
+            });
+        } else res.render('cleaning', {
             navButton: {
-                text: 'Login / Register',
-                link: '/login'
+                text: 'Profile',
+                link: '/profile'
             },
             empty: 'Nothing'
         });
-    } else res.render('cleaning', {
-        navButton: {
-            text: 'Profile',
-            link: '/profile'
-        },
-        empty: 'Nothing'
-    });
+    } else {
+        if (user === '') {
+            res.redirect('login');
+        } else {
+            //console.log(req.query);
+            if (req.query.date === undefined || req.query.time === undefined || req.query.nostaff === undefined || req.query.desc === undefined || req.query.zip === undefined ||
+                req.query.date === '' || req.query.time === '' || req.query.nostaff === '' || req.query.desc === '' || req.query.zip === '') {
+                console.log('Incom');
+                res.redirect('cleaning');
+                return;
+            }
+            addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip, "Cleaning");
+            res.render('successBooking', {
+                navButton: {
+                    text: 'Profile',
+                    link: '/profile'
+                },
+                empty: 'Nothing'
+            });
+        }
+    }
 });
 
 // Repair Page
 app.get('/repair', (req, res) => {
-    if (user === '') {
-        res.render('repair', {
+    if (Object.entries(req.query).length === 0 && req.query.constructor === Object) {
+        if (user === '') {
+            res.render('repair', {
+                navButton: {
+                    text: 'Login / Register',
+                    link: '/login'
+                },
+                empty: 'Nothing'
+            });
+        } else res.render('repair', {
             navButton: {
-                text: 'Login / Register',
-                link: '/login'
+                text: 'Profile',
+                link: '/profile'
             },
             empty: 'Nothing'
         });
-    } else res.render('repair', {
-        navButton: {
-            text: 'Profile',
-            link: '/profile'
-        },
-        empty: 'Nothing'
-    });
+    } else {
+        if (user === '') {
+            res.redirect('login');
+        } else {
+            //console.log(req.query);
+            if (req.query.date === undefined || req.query.time === undefined || req.query.nostaff === undefined || req.query.desc === undefined || req.query.zip === undefined ||
+                req.query.date === '' || req.query.time === '' || req.query.nostaff === '' || req.query.desc === '' || req.query.zip === '') {
+                console.log('Incom');
+                res.redirect('repair');
+                return;
+            }
+            addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip, "Repair");
+            res.render('successBooking', {
+                navButton: {
+                    text: 'Profile',
+                    link: '/profile'
+                },
+                empty: 'Nothing'
+            });
+        }
+    }
 });
 
 // Login Page
