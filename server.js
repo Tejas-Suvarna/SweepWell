@@ -113,7 +113,7 @@ app.get('/', (req, res) => {
     if (user === '') {
         res.render('home', {
             navButton:{
-                text: 'Login/Register',
+                text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
@@ -132,7 +132,7 @@ app.get('/about', (req, res) => {
     if (user === '') {
         res.render('about', {
             navButton:{
-                text: 'Login/Register',
+                text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
@@ -151,7 +151,7 @@ app.get('/contact', (req, res) => {
     if (user === '') {
         res.render('contact', {
             navButton:{
-                text: 'Login/Register',
+                text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
@@ -170,7 +170,7 @@ app.get('/construction', (req, res) => {
     if (user === '') {
         res.render('construction', {
             navButton:{
-                text: 'Login/Register',
+                text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
@@ -189,7 +189,7 @@ app.get('/cleaning', (req, res) => {
     if (user === '') {
         res.render('cleaning', {
             navButton:{
-                text: 'Login/Register',
+                text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
@@ -208,7 +208,7 @@ app.get('/repair', (req, res) => {
     if (user === '') {
         res.render('repair', {
             navButton:{
-                text: 'Login/Register',
+                text: 'Login / Register',
                 link: '/login'
             },
             empty: 'Nothing'
