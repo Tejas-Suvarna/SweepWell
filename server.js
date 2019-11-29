@@ -6,14 +6,48 @@ const hbs = require('express-handlebars');
 // const fetch = require('node-fetch');
 const app = express();
 const sqlite3 = require('sqlite3').verbose();
+const bodyParser = require('body-parser');
 
 ////////////////////////////////
 ////////////////////////////////
 
 
-////////#### IMPORTS ####////////
+////////#### GLOBAL ####////////
 
-const db = new sqlite3.Database('database');
+let user = '';
+
+const db = new sqlite3.Database('database.db');
+
+app.use(bodyParser.urlencoded({ // support encoded bodies
+    extended: true
+}));
+
+let getUser = (username, password) => {
+    db.get('SELECT COUNT(*) count from USER WHERE USERNAME = ? AND PASSWORD = ?;', [username, password], (err, result) => { /////QUERY TO CHECK IF USER ALREADY EXISTS
+        if (err) {
+            console.log(err);
+        } else if (result.count == 1) {
+            user = username;
+        }
+    });
+}
+////////////////////////////////
+////////////////////////////////
+
+////////#### SQL ####////////
+
+/*
+var userid1, ordinfo;
+db.all('SELECT userid uid,username uname FROM USER ', (err, result) => {
+    if (err) {
+        console.log(err)
+    } else {
+        userid1 = result;
+        console.log("This is the", userid1[1]);
+    }
+})
+db.close();
+*/
 
 ////////////////////////////////
 ////////////////////////////////
@@ -43,6 +77,8 @@ app.use("/images", express.static(__dirname + '/public/images'));
 
 
 ////////#### CHECKING FOR ROUTES ####////////
+
+/****RENDERING HTML PAGES****/
 
 // Home Page
 app.get('/', (req, res) => {
@@ -82,6 +118,24 @@ app.get('/login', (req, res) => {
 // Register Page
 app.get('/register', (req, res) => {
     res.render('register');
+});
+
+/****PROCESSING REQUESTS****/
+
+// Authenticating the User
+app.post('/login/auth', (req, res) => {
+    const redirect = () => {
+        console.log(user);
+        if (user !== '') {
+            res.redirect('/');
+        } else {
+            res.redirect('/login');
+        }
+    }
+    const username = req.body['username'];
+    const password = req.body['password'];
+    getUser(username, password);
+    setTimeout(redirect, 1000);
 });
 
 ////////////////////////////////
