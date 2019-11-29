@@ -206,8 +206,13 @@ app.get('/construction', (req, res) => {
             //console.log(req.query);
             if (req.query.date === undefined || req.query.time === undefined || req.query.nostaff === undefined || req.query.desc === undefined || req.query.zip === undefined ||
                 req.query.date === '' || req.query.time === '' || req.query.nostaff === '' || req.query.desc === '' || req.query.zip === '') {
-                console.log('Incom');
-                res.redirect('construction');
+                res.render('errorBooking', {
+                    navButton: {
+                        text: 'Profile',
+                        link: '/profile'
+                    },
+                    empty: 'Nothing'
+                });
                 return;
             }
             addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip, "Construction");
@@ -247,8 +252,13 @@ app.get('/cleaning', (req, res) => {
             //console.log(req.query);
             if (req.query.date === undefined || req.query.time === undefined || req.query.nostaff === undefined || req.query.desc === undefined || req.query.zip === undefined ||
                 req.query.date === '' || req.query.time === '' || req.query.nostaff === '' || req.query.desc === '' || req.query.zip === '') {
-                console.log('Incom');
-                res.redirect('cleaning');
+                res.render('errorBooking', {
+                    navButton: {
+                        text: 'Profile',
+                        link: '/profile'
+                    },
+                    empty: 'Nothing'
+                });
                 return;
             }
             addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip, "Cleaning");
@@ -288,8 +298,7 @@ app.get('/repair', (req, res) => {
             //console.log(req.query);
             if (req.query.date === undefined || req.query.time === undefined || req.query.nostaff === undefined || req.query.desc === undefined || req.query.zip === undefined ||
                 req.query.date === '' || req.query.time === '' || req.query.nostaff === '' || req.query.desc === '' || req.query.zip === '') {
-                console.log('Incom');
-                res.redirect('repair');
+                res.render('errorBooking');
                 return;
             }
             addUserBooking(user, req.query.date, req.query.time, req.query.nostaff, req.query.desc, req.query.zip, "Repair");
@@ -323,6 +332,18 @@ app.get('/register', (req, res) => {
 app.get('/registerInvalid', (req, res) => {
     res.render('registerInvalid');
 });
+
+app.get('/profile', (req, res) => {
+    
+    res.render('profile', {
+        navButton: {
+            text: 'Profile',
+            link: '/profile'
+        },
+        empty: 'Nothing'
+    });
+});
+
 
 /****PROCESSING REQUESTS****/
 
