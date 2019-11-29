@@ -74,6 +74,27 @@ let addUserBooking = (username, date, time, noStaff, desc, zipcode, job) => {
     //db.close();
 }
 
+let getUserOrders = (username) => {
+    let arr = [];
+    const sql = 'SELECT ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb FROM ORDERS WHERE USERID = (SELECT USERID FROM USER WHERE USERNAME = ?);';
+    db.each(sql, [username], (err, row) => {
+        if (err) {
+            throw err;
+        }
+        arr.push({
+            ORDERID: row.ordid,
+            DATE: row.date,
+            NO_OF_STAFF: row.nos,
+            DESCRIPTION: row.desc,
+            ZIPCODE: row.zip,
+            JOB: row.jb
+        });
+        //console.log(`${row.ordid} ${row.date} - ${row.nos}`);
+    });
+    return arr;
+    //db.close();
+}
+
 
 ////////////////////////////////
 ////////////////////////////////
@@ -333,15 +354,21 @@ app.get('/registerInvalid', (req, res) => {
     res.render('registerInvalid');
 });
 
+//Displaying orders in profile
 app.get('/profile', (req, res) => {
-    
-    res.render('profile', {
-        navButton: {
-            text: 'Profile',
-            link: '/profile'
-        },
-        empty: 'Nothing'
-    });
+    let entries = getUserOrders(user);
+    const redirect = () => {
+        console.log("Fetch all data");
+        console.log(entries);
+        res.render('profile', {
+            navButton: {
+                text: 'Profile',
+                link: '/profile'
+            },
+            entries1: entries
+        });
+    }
+    setTimeout(redirect, 1000);
 });
 
 
