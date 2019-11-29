@@ -15,12 +15,14 @@ const bodyParser = require('body-parser');
 ////////#### GLOBAL ####////////
 
 let user = '';
+let alreadyUser = false;
 
 const db = new sqlite3.Database('database.db');
 
 app.use(bodyParser.urlencoded({ // support encoded bodies
     extended: true
 }));
+
 
 let getUser = (username, password) => {
     db.get('SELECT COUNT(*) count from USER WHERE USERNAME = ? AND PASSWORD = ?;', [username, password], (err, result) => { /////QUERY TO CHECK IF USER ALREADY EXISTS
@@ -30,7 +32,33 @@ let getUser = (username, password) => {
             user = username;
         }
     });
+    //db.close();
 }
+
+let registerUser = (username, password) => {
+    db.get('SELECT COUNT(*) count from USER WHERE USERNAME = ?;', [username], (err, result) => { /////QUERY TO CHECK IF USER ALREADY EXISTS
+        if (err) {
+            console.log(err);
+        } else if (result.count == 0) {
+            db.serialize(function () {
+                try {
+                    var stmt = db.prepare("INSERT INTO USER(USERNAME,PASSWORD) values(?,?)");
+                    stmt.run(username, password);
+                    stmt.finalize();
+                    user = username;
+                    console.log(user + " registered.");
+                } catch (err) {
+                    console.log("Oh no")
+                }
+            });
+        } else {
+            alreadyUser = true;
+        }
+    });
+    //db.close();
+}
+
+
 ////////////////////////////////
 ////////////////////////////////
 
@@ -82,35 +110,116 @@ app.use("/images", express.static(__dirname + '/public/images'));
 
 // Home Page
 app.get('/', (req, res) => {
-    if(user !== ''){
-        res.render('userHome',{user});
-    }
-    else res.render('home',{user});
+    if (user === '') {
+        res.render('home', {
+            navButton:{
+                text: 'Login/Register',
+                link: '/login'
+            },
+            empty: 'Nothing'
+        });
+    } else res.render('home', {
+        navButton:{
+            text: 'Profile',
+            link: '/profile'
+        },
+        empty: 'Nothing'
+    });
 });
 
 // About Page
 app.get('/about', (req, res) => {
-    res.render('about');
+    if (user === '') {
+        res.render('about', {
+            navButton:{
+                text: 'Login/Register',
+                link: '/login'
+            },
+            empty: 'Nothing'
+        });
+    } else res.render('about', {
+        navButton:{
+            text: 'Profile',
+            link: '/profile'
+        },
+        empty: 'Nothing'
+    });
 });
 
 // Contact Page
 app.get('/contact', (req, res) => {
-    res.render('contact');
+    if (user === '') {
+        res.render('contact', {
+            navButton:{
+                text: 'Login/Register',
+                link: '/login'
+            },
+            empty: 'Nothing'
+        });
+    } else res.render('contact', {
+        navButton:{
+            text: 'Profile',
+            link: '/profile'
+        },
+        empty: 'Nothing'
+    });
 });
 
 // Construction Page
 app.get('/construction', (req, res) => {
-    res.render('construction');
+    if (user === '') {
+        res.render('construction', {
+            navButton:{
+                text: 'Login/Register',
+                link: '/login'
+            },
+            empty: 'Nothing'
+        });
+    } else res.render('construction', {
+        navButton:{
+            text: 'Profile',
+            link: '/profile'
+        },
+        empty: 'Nothing'
+    });
 });
 
 // Cleaning Page
 app.get('/cleaning', (req, res) => {
-    res.render('cleaning');
+    if (user === '') {
+        res.render('cleaning', {
+            navButton:{
+                text: 'Login/Register',
+                link: '/login'
+            },
+            empty: 'Nothing'
+        });
+    } else res.render('cleaning', {
+        navButton:{
+            text: 'Profile',
+            link: '/profile'
+        },
+        empty: 'Nothing'
+    });
 });
 
 // Repair Page
 app.get('/repair', (req, res) => {
-    res.render('repair');
+    if (user === '') {
+        res.render('repair', {
+            navButton:{
+                text: 'Login/Register',
+                link: '/login'
+            },
+            empty: 'Nothing'
+        });
+    } else res.render('repair', {
+        navButton:{
+            text: 'Profile',
+            link: '/profile'
+        },
+        empty: 'Nothing'
+    });
 });
 
 // Login Page
@@ -118,26 +227,52 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
+// Login Invalid Page
+app.get('/loginInvalid', (req, res) => {
+    res.render('loginInvalid');
+});
+
 // Register Page
 app.get('/register', (req, res) => {
     res.render('register');
 });
 
+// Register Invalid Page
+app.get('/registerInvalid', (req, res) => {
+    res.render('registerInvalid');
+});
+
 /****PROCESSING REQUESTS****/
 
-// Authenticating the User
+// Authenticating User Login
 app.post('/login/auth', (req, res) => {
     const redirect = () => {
         console.log(user + " logged in.");
         if (user !== '') {
             res.redirect('/');
         } else {
-            res.redirect('/login');
+            res.redirect('/loginInvalid');
         }
     }
     const username = req.body['username'];
     const password = req.body['password'];
     getUser(username, password);
+    setTimeout(redirect, 1000);
+});
+
+// Authenticating User Register
+app.post('/register/auth', (req, res) => {
+    const redirect = () => {
+        console.log(user + " logged in.");
+        if (!alreadyUser) {
+            res.redirect('/');
+        } else{
+            res.redirect('/registerInvalid');
+        }
+    }
+    const username = req.body['username'];
+    const password = req.body['password'];
+    registerUser(username, password);
     setTimeout(redirect, 1000);
 });
 
