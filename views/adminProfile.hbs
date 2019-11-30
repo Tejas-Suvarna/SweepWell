@@ -56,20 +56,16 @@
     <section id="welcome-jumbotron" style="margin-bottom: -50px;">
         <div class="bg-light">
             <div class="text-dark bg-white">
-                <div class="jumbotron" id="jumbotron1">
+                <div class="jumbotron" id="jumbotron2">
                     <div class="container">
-                        <h1 class="display-4">Hello, {{user}}!</h1>
-                        <p class="lead">Welcome to SweepWell, a premium Home services firm. We assure you quality
-                            work
-                            from
-                            our
-                            dedicated staff.
-                            to
-                            featured content or information.</p>
+                        <h1 class="display-4">Welcome back Boss :)</h1>
+                        <p class="lead">Check out the insights on your precious customers.</p>
                         <hr class="my-4">
-                        <p>Wanna know more about us?</p>
+                        <p>View customer orders and enquries here</p>
                         <p class="lead">
-                            <a class="btn btn btn-outline-success btn-lg" href="/about" role="button">Learn more</a>
+                            <a href="/admin/messages"><button type="button" class="btn btn-danger">
+                                    Messages <span class="badge badge-light">{{messagesNO}}</span>
+                                </button></a>
                         </p>
                     </div>
                 </div>
@@ -80,7 +76,7 @@
     <!-- NO ORDERS BEAR-->
     <section>
         <div class="text-center bg-light" style="display: {{noResultsDiv.bear}};"><img
-                src="../images/no-results-bear.png" alt="no-results-bear" class="img-responsive center-block" />
+                src="../images/no-results-sloth.png" alt="no-results-bear" class="img-responsive center-block" />
         </div>
     </section>
 
@@ -118,8 +114,8 @@
                         <div class="card">
                             <div class="card-header bg-primary ">
                                 <div class="d-flex bd-highlight text-white">
-                                    <div class="p-2 flex-fill bd-highlight">Order Placed For <br><strong>{{this.TIME}} -
-                                            {{this.DATE}}</strong>
+                                    <div class="p-2 flex-fill bd-highlight">Order Placed By
+                                        {{this.USERNAME}} - {{this.PHONENO}}<br><strong>On {{this.DATE}}</strong>
                                     </div>
                                     <div class="p-2 flex-fill bd-highlight text-right">Order #
                                         {{this.ORDERID}}<br>Booked
@@ -129,13 +125,19 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-flex bd-highlight">
-                                    <div class="p-2 flex-fill bd-highlight">
+                                    <div class="p-2 flex-grow-1 bd-highlight">
                                         <h5 class="card-title">{{this.JOB}}</h5>
                                         <p class="card-text">{{this.DESCRIPTION}}</p>
                                     </div>
-                                    <div class="p-2 flex-fill bd-highlight text-right">
+                                    <div class="pl-5 pr-5 bd-highlight align-self-center"><a
+                                            href="tel:{{this.PHONENO}}"><i class="fa fa-phone-square fa-3x mb-2"
+                                                aria-hidden="true"
+                                                style="color: rgb(0, 51, 128);"></i></a>&nbsp;&nbsp;&nbsp;<a
+                                            href="mailto:{{this.EMAIL}}"><i class="fa fa-reply fa-3x mb-2"
+                                                aria-hidden="true" style="color: rgb(255, 102, 0);"></i></a></div>
+                                    <div class="p-2 bd-highlight">
                                         <h1 class="h4">No. of Staff</h1>
-                                        <h1 class="h1">{{this.NO_OF_STAFF}}</h1>
+                                        <h1 class="h1 text-right">{{this.NO_OF_STAFF}}</h1>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight">
