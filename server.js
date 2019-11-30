@@ -15,6 +15,7 @@ const bodyParser = require('body-parser');
 ////////#### GLOBAL ####////////
 
 let user = '';
+let noOfMessages = 0;
 let alreadyUser = false;
 
 const db = new sqlite3.Database('database.db');
@@ -139,7 +140,7 @@ let getUserOrders = (username) => {
 
 let getAllOrders = () => {
     let arr = [];
-    const sql = 'SELECT USERNAME uname, PHONENO phno, ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS, USER WHERE USER.USERID = ORDERS.USERID;';
+    const sql = 'SELECT USERNAME uname, PHONE phno, EMAIL email, ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS, USER WHERE USER.USERID = ORDERS.USERID;';
     db.each(sql, (err, row) => {
         if (err) {
             throw err;
@@ -155,7 +156,8 @@ let getAllOrders = () => {
             ADDEDDATE: row.ad,
             TIME: row.tm,
             USERNAME: row.uname,
-            PHONENO: phno
+            PHONENO: row.phno,
+            EMAIL: row.email
         });
         //console.log(`${row.ordid} ${row.date} - ${row.nos}`);
     });
@@ -163,7 +165,37 @@ let getAllOrders = () => {
     //db.close();
 }
 
+let addMessage = (fname, lname, email, phone, message) => {
+    db.serialize(function () {
+        try {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            var dateNow = yyyy + '-' + mm + '-' + dd;
+            let stmt = db.prepare("INSERT INTO MESSAGES(FNAME,LNAME,EMAIL,PHONE,MESSAGE,DATE) values(?,?,?,?,?,?);");
+            stmt.run(fname, lname, email, phone, message, formatDate(dateNow));
+            stmt.finalize();
+            user = username;
+            console.log("Message sent.");
+        } catch (err) {
+            console.log("Oh no")
+        }
+    });
 
+    //db.close();
+}
+
+let getNoOfMessages = () => {
+    db.get('SELECT COUNT(*) count from MESSAGES;', (err, result) => { /////QUERY TO CHECK IF USER ALREADY EXISTS
+        if (err) {
+            console.log(err);
+        } else {
+            noOfMessages = result.count;
+        }
+    });
+    //
+}
 ////////////////////////////////
 ////////////////////////////////
 
@@ -252,22 +284,46 @@ app.get('/about', (req, res) => {
 });
 
 // Contact Page
+// fname=Tejas&lname=Suvarna&email=tejasnareshsuvarna%40gmail.com&phonr=09008402620&message=Testing
 app.get('/contact', (req, res) => {
-    if (user === '') {
-        res.render('contact', {
+    if (Object.entries(req.query).length === 0 && req.query.constructor === Object) {
+        if (user === '') {
+            res.render('contact', {
+                navButton: {
+                    text: 'Login / Register',
+                    link: '/login'
+                },
+                empty: 'Nothing'
+            });
+        } else res.render('contact', {
             navButton: {
-                text: 'Login / Register',
-                link: '/login'
+                text: 'Profile',
+                link: '/profile'
             },
             empty: 'Nothing'
         });
-    } else res.render('contact', {
-        navButton: {
-            text: 'Profile',
-            link: '/profile'
-        },
-        empty: 'Nothing'
-    });
+    } else {
+        //console.log(req.query);
+        if (req.query.fname === undefined || req.query.lname === undefined || req.query.email === undefined || req.query.phone === undefined || req.query.message === undefined ||
+            req.query.fname === '' || req.query.lname === '' || req.query.email === '' || req.query.phone === '' || req.query.message === '') {
+            res.render('errorContact', {
+                navButton: {
+                    text: 'Profile',
+                    link: '/profile'
+                },
+                empty: 'Nothing'
+            });
+            return;
+        }
+        addMessage(req.query.fname, req.query.lname, req.query.email, req.query.phone, req.query.message);
+        res.render('successContact', {
+            navButton: {
+                text: 'Profile',
+                link: '/profile'
+            },
+            empty: 'Nothing'
+        });
+    }
 });
 
 // Construction Page
@@ -426,10 +482,11 @@ app.get('/registerInvalid', (req, res) => {
 app.get('/profile', (req, res) => {
     if (user == 'admin') {
         let entries = getAllOrders();
+        getNoOfMessages();
         const redirect = () => {
             console.log("Fetch all orders.");
             console.log(entries);
-            if(entries.length == 0){
+            if (entries.length == 0) {
                 noResultsDiv = {
                     bear: 'block',
                     orders: 'none'
@@ -440,6 +497,7 @@ app.get('/profile', (req, res) => {
                     orders: 'block'
                 }
             }
+            //console.log('messages ' + noOfMessages);
             res.render('adminProfile', {
                 navButton: {
                     text: 'Profile',
@@ -447,7 +505,8 @@ app.get('/profile', (req, res) => {
                 },
                 entries,
                 user,
-                noResultsDiv
+                noResultsDiv,
+                messagesNO : noOfMessages
             });
         }
         setTimeout(redirect, 1000);
@@ -490,7 +549,7 @@ app.post('/login/auth', (req, res) => {
         console.log(user + " logged in.");
         if (user === 'admin') {
             res.redirect('/profile');
-        } else if(user !== '') {
+        } else if (user !== '') {
             res.redirect('/');
         } else {
             res.redirect('/loginInvalid');

@@ -63,9 +63,9 @@
                         <hr class="my-4">
                         <p>View customer orders and enquries here</p>
                         <p class="lead">
-                            <button type="button" class="btn btn-danger" href="/admin/messages">
-                                Messages <span class="badge badge-light">4</span>
-                            </button>
+                            <a href="/admin/messages"><button type="button" class="btn btn-danger">
+                                    Messages <span class="badge badge-light">{{messagesNO}}</span>
+                                </button></a>
                         </p>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                             <div class="card-header bg-primary ">
                                 <div class="d-flex bd-highlight text-white">
                                     <div class="p-2 flex-fill bd-highlight">Order Placed By
-                                        {{this.USERNAME}}<br><strong>On {{this.DATE}}</strong>
+                                        {{this.USERNAME}} - {{this.PHONENO}}<br><strong>On {{this.DATE}}</strong>
                                     </div>
                                     <div class="p-2 flex-fill bd-highlight text-right">Order #
                                         {{this.ORDERID}}<br>Booked
@@ -125,21 +125,24 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-flex bd-highlight">
-                                    <div class="p-2 flex-fill bd-highlight">
+                                    <div class="p-2 flex-grow-1 bd-highlight">
                                         <h5 class="card-title">{{this.JOB}}</h5>
                                         <p class="card-text">{{this.DESCRIPTION}}</p>
                                     </div>
-                                    <div class="p-2 flex-fill bd-highlight text-right">
+                                    <div class="pl-5 pr-5 bd-highlight align-self-center"><a
+                                            href="tel:{{this.PHONENO}}"><i class="fa fa-phone-square fa-3x mb-2"
+                                                aria-hidden="true"
+                                                style="color: rgb(0, 51, 128);"></i></a>&nbsp;&nbsp;&nbsp;<a
+                                            href="mailto:{{this.EMAIL}}"><i class="fa fa-reply fa-3x mb-2"
+                                                aria-hidden="true" style="color: rgb(255, 102, 0);"></i></a></div>
+                                    <div class="p-2 bd-highlight">
                                         <h1 class="h4">No. of Staff</h1>
-                                        <h1 class="h1">{{this.NO_OF_STAFF}}</h1>
+                                        <h1 class="h1 text-right">{{this.NO_OF_STAFF}}</h1>
                                     </div>
                                 </div>
                                 <div class="d-flex bd-highlight">
                                     <div class="p-2 flex-fill bd-highlight">
                                         Zipcode: {{this.ZIPCODE}}
-                                    </div>
-                                    <div class="p-2 flex-fill bd-highlight text-right">
-                                        <p class="text-danger">{{this.STATUS}}</p>
                                     </div>
                                 </div>
                             </div>
