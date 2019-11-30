@@ -196,6 +196,29 @@ let getNoOfMessages = () => {
     });
     //
 }
+
+
+let getAllMessages = () => {
+    let arr = [];
+    const sql = 'SELECT FNAME fn,LNAME ln,EMAIL email,PHONE phno,MESSAGE msg ,DATE dt FROM MESSAGES';
+    db.each(sql, (err, row) => {
+        if (err) {
+            throw err;
+        }
+        arr.push({
+            FNAME: row.fn,
+            LNAME: row.ln,
+            EMAIL: row.email,
+            PHONE: row.phno,
+            MESSAGE: row.msg,
+            DATE: row.dt
+        });
+        //console.log(`${row.ordid} ${row.date} - ${row.nos}`);
+    });
+    return arr;
+    //db.close();
+}
+
 ////////////////////////////////
 ////////////////////////////////
 
@@ -476,6 +499,38 @@ app.get('/register', (req, res) => {
 // Register Invalid Page
 app.get('/registerInvalid', (req, res) => {
     res.render('registerInvalid');
+});
+
+// Admin Messages Page
+app.get('/admin/messages', (req, res) => {
+    let messages = getAllMessages();
+    const redirect = () => {
+        console.log("Fetch all messages.");
+        console.log(messages);
+        if (messages.length == 0) {
+            noResultsDiv = {
+                bear: 'block',
+                orders: 'none'
+            }
+        } else {
+            noResultsDiv = {
+                bear: 'none',
+                orders: 'block'
+            }
+        }
+        //console.log('messages ' + noOfMessages);
+        res.render('messages', {
+            navButton: {
+                text: 'Profile',
+                link: '/adminProfile'
+            },
+            messages,
+            user,
+            noResultsDiv,
+            messagesNO : noOfMessages,
+        });
+    }
+    setTimeout(redirect, 1000);
 });
 
 //Displaying orders in profile
