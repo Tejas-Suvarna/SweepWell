@@ -69,20 +69,20 @@ let getUser = (username, password) => {
     //db.close();
 }
 
-let registerUser = (username, password, phone) => {
+let registerUser = (username, password, phone, email) => {
     db.get('SELECT COUNT(*) count from USER WHERE USERNAME = ?;', [username], (err, result) => { /////QUERY TO CHECK IF USER ALREADY EXISTS
         if (err) {
             console.log(err);
         } else if (result.count == 0) {
             db.serialize(function () {
                 try {
-                    let stmt = db.prepare("INSERT INTO USER(USERNAME,PASSWORD, PHONE) values(?,?,?)");
-                    stmt.run(username, password, phone);
+                    let stmt = db.prepare("INSERT INTO USER(USERNAME,PASSWORD,PHONE,EMAIL) values(?,?,?,?)");
+                    stmt.run(username, password, phone, email);
                     stmt.finalize();
                     user = username;
                     console.log(user + " registered.");
                 } catch (err) {
-                    console.log("Oh no");
+                    console.log(err);
                 }
             });
         } else {
@@ -139,7 +139,7 @@ let getUserOrders = (username) => {
 
 let getAllOrders = () => {
     let arr = [];
-    const sql = 'SELECT USERNAME uname, ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS, USER WHERE USER.USERID = ORDERS.USERID;';
+    const sql = 'SELECT USERNAME uname, PHONENO phno, ORDERID ordid,DATE date,NO_OF_STAFF nos,DESCRIPTION desc,ZIPCODE zip, JOB jb, STATUS stats, ADDEDDATE ad, TIME tm FROM ORDERS, USER WHERE USER.USERID = ORDERS.USERID;';
     db.each(sql, (err, row) => {
         if (err) {
             throw err;
@@ -154,7 +154,8 @@ let getAllOrders = () => {
             STATUS: row.stats,
             ADDEDDATE: row.ad,
             TIME: row.tm,
-            USERNAME: row.uname
+            USERNAME: row.uname,
+            PHONENO: phno
         });
         //console.log(`${row.ordid} ${row.date} - ${row.nos}`);
     });
@@ -514,7 +515,8 @@ app.post('/register/auth', (req, res) => {
     const username = req.body['username'];
     const password = req.body['password'];
     const phone = req.body['phone'];
-    registerUser(username, password, phone);
+    const email = req.body['email'];
+    registerUser(username, password, phone, email);
     setTimeout(redirect, 1000);
 });
 
