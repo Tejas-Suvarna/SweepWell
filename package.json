@@ -24,7 +24,7 @@
   "homepage": "https://github.com/Tejas-Suvarna/SweepWell#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-handlebars": "^3.1.0",
     "sqlite3": "^4.1.0"
   }
